@@ -10,7 +10,20 @@ if (isset($_FILES['gambar'])) {
 
     if (move_uploaded_file($file_tmp, $target_dir)) {
         $gambar = $file_name;
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Gagal upload gambar',
+            'debug' => [
+                'file' => $_FILES['gambar'],
+                'target' => $target_dir
+            ]
+        ]);
+        exit;
     }
+} else {
+    echo json_encode(['success' => false, 'message' => 'File gambar tidak ditemukan']);
+    exit;
 }
 
 $query = "INSERT INTO banner (gambar) VALUES ('$gambar')";
