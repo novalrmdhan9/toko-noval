@@ -1,3 +1,4 @@
+<?
 include '../db.php';
 header('Content-Type: application/json');
 
@@ -14,4 +15,5 @@ while($row = mysqli_fetch_assoc($query)) {
 echo json_encode([
     'success' => true,
     'data' => $result
-]);
+]);    
+php?>
