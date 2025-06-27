@@ -1,13 +1,8 @@
 FROM php:8.2-apache
 
-# Copy semua file ke dalam container
 COPY . /var/www/
 
-# Ubah DocumentRoot Apache jadi ke public/
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/public|' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's|DocumentRoot /var/www/public|DocumentRoot /var/www|' /etc/apache2/sites-available/000-default.conf
 
-# Aktifkan rewrite module (kalau pakai routing di .htaccess)
 RUN a2enmod rewrite
-
-# Buka port 80
 EXPOSE 80
