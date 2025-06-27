@@ -5,12 +5,13 @@ header("Access-Control-Allow-Methods: *");
 
 
 
-$host = "52.76.27.242";
-$user = "sql12787176";
-$pass = "m7YXbd7mye";
-$db   = "sql12787176";
+$host = "mainline.proxy.rlwy.net";
+$port = 31689;
+$user = "root";
+$pass = "JokmUrOVupffSlhsGgywSxexpBiCPCuG";
+$db   = "railway";
 
-$conn = mysqli_connect($host, $user, $pass, $db);
+$conn = mysqli_connect($host, $user, $pass, $db, $port);
 
 if (!$conn) {
     die("Koneksi gagal: " . mysqli_connect_error());
