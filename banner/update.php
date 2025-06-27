@@ -2,25 +2,18 @@
 include '../db.php';
 header('Content-Type: application/json');
 
-$id = $_POST['id_banner'] ?? '';
-$gambar = '';
+$data = json_decode(file_get_contents("php://input"), true);
 
-if (isset($_FILES['gambar'])) {
-    $file_name = time() . '_' . $_FILES['gambar']['name'];
-    $file_tmp = $_FILES['gambar']['tmp_name'];
-    $target_dir = '../uploads/' . $file_name;
+$id = $data['id_banner'] ?? '';
+$gambar = $data['gambar'] ?? '';
 
-    if (move_uploaded_file($file_tmp, $target_dir)) {
-        $gambar = $file_name;
-    }
+if ($id === '' || $gambar === '') {
+    echo json_encode(['success' => false, 'message' => 'ID atau URL gambar tidak ditemukan']);
+    exit;
 }
 
-if ($gambar != '') {
-    $query = "UPDATE banner SET gambar = '$gambar' WHERE id_banner = '$id'";
-    $result = mysqli_query($conn, $query);
-} else {
-    $result = false;
-}
+$query = "UPDATE banner SET gambar = '$gambar' WHERE id_banner = '$id'";
+$result = mysqli_query($conn, $query);
 
 if ($result) {
     echo json_encode(['success' => true, 'message' => 'Banner berhasil diperbarui']);
