@@ -1,19 +1,12 @@
 FROM php:8.2-apache
 
-# Install mysqli extension
 RUN docker-php-ext-install mysqli
-
-# Enable mod_rewrite
 RUN a2enmod rewrite
 
-# Copy semua file ke root html Apache
-COPY . /var/www/html/
+# Ubah Apache agar listen di port 8080 (Railway default)
+RUN sed -i 's/80/8080/g' /etc/apache2/ports.conf /etc/apache2/sites-enabled/000-default.conf
 
-# Set permission ke folder uploads
+COPY . /var/www/html/
 RUN chmod -R 777 /var/www/html/uploads
 
-# Expose port 80
-EXPOSE 80
-
-# Jalankan Apache saat container start
-CMD ["apache2-foreground"]
+EXPOSE 8080
