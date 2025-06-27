@@ -1,29 +1,22 @@
 <?php
 include '../db.php';
+header('Content-Type: application/json');
 
-$id = $_POST['id_barang'] ?? '';
-$nama = $_POST['nama_barang'] ?? '';
-$harga = $_POST['harga'] ?? '';
-$deskripsi = $_POST['deskripsi'] ?? '';
-$id_kategori = $_POST['id_kategori'] ?? '';
-$gambar_lama = $_POST['gambar_lama'] ?? '';
+// Ambil data JSON dari body
+$input = json_decode(file_get_contents('php://input'), true);
 
-$gambar = $gambar_lama;
+// Ambil field
+$id = $input['id_barang'] ?? '';
+$nama = $input['nama_barang'] ?? '';
+$harga = $input['harga'] ?? '';
+$deskripsi = $input['deskripsi'] ?? '';
+$id_kategori = $input['id_kategori'] ?? '';
+$gambar = $input['gambar'] ?? '';
 
-// Jika ada file gambar baru diupload
-if (isset($_FILES['gambar'])) {
-    $file_name = time() . '_' . $_FILES['gambar']['name'];
-    $file_tmp = $_FILES['gambar']['tmp_name'];
-    $target_dir = '../uploads/' . $file_name;
-
-    if (move_uploaded_file($file_tmp, $target_dir)) {
-        $gambar = $file_name;
-
-        // Hapus gambar lama jika ada dan berbeda
-        if (!empty($gambar_lama) && file_exists('../uploads/' . $gambar_lama)) {
-            unlink('../uploads/' . $gambar_lama);
-        }
-    }
+// Validasi id
+if (empty($id)) {
+    echo json_encode(['success' => false, 'message' => 'id_barang tidak boleh kosong']);
+    exit;
 }
 
 $query = "UPDATE barang 
