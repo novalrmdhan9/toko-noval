@@ -2,11 +2,14 @@
 include '../db.php';
 header('Content-Type: application/json');
 
+// Ambil JSON body
 $data = json_decode(file_get_contents("php://input"), true);
+
+// Ambil data dari JSON
 $email   = $data['email'] ?? '';
 $alamat  = $data['alamat'] ?? '';
 $no_hp   = $data['no_hp'] ?? '';
-$image   = $data['image'] ?? '';
+$avatar  = $data['avatar'] ?? '';
 
 // Validasi
 if (empty($email)) {
@@ -19,16 +22,17 @@ $check = mysqli_query($conn, "SELECT * FROM profile_users WHERE email='$email'")
 if (mysqli_num_rows($check) > 0) {
     // Update
     $query = "UPDATE profile_users SET alamat='$alamat', no_hp='$no_hp'";
-    if (!empty($image)) {
-        $query .= ", avatar='$image'";
+    if (!empty($avatar)) {
+        $query .= ", avatar='$avatar'";
     }
     $query .= " WHERE email='$email'";
 } else {
     // Insert
     $query = "INSERT INTO profile_users (email, alamat, no_hp, avatar) 
-              VALUES ('$email', '$alamat', '$no_hp', '$image')";
+              VALUES ('$email', '$alamat', '$no_hp', '$avatar')";
 }
 
+// Eksekusi
 if (mysqli_query($conn, $query)) {
     echo json_encode(["success" => true, "message" => "Profile berhasil disimpan"]);
 } else {
