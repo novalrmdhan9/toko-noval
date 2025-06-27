@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: *");
 
 
 
-$host = "sql12.freesqldatabase.com";
+$host = "52.76.27.242";
 $user = "sql12787176";
 $pass = "m7YXbd7mye";
 $db   = "sql12787176";
