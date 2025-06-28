@@ -4,7 +4,15 @@ header('Content-Type: application/json');
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!$data || !isset($data['email']) || !isset($data['alamat']) || !isset($data['total']) || !isset($data['items'])) {
+// Cek input
+if (
+    !$data ||
+    !isset($data['email']) ||
+    !isset($data['alamat']) ||
+    !isset($data['total']) ||
+    !isset($data['items']) ||
+    !isset($data['metode']) // ⬅️ tambahkan pengecekan metode
+) {
     echo json_encode(["success" => false, "message" => "Data tidak lengkap"]);
     exit;
 }
@@ -12,12 +20,13 @@ if (!$data || !isset($data['email']) || !isset($data['alamat']) || !isset($data[
 $email = $data['email'];
 $alamat = $data['alamat'];
 $total = $data['total'];
+$metode = $data['metode']; // ⬅️ ambil metode pembayaran
 $items = $data['items'];
 
 // Simpan ke tabel transaksi
-$query = "INSERT INTO transaksi (email, alamat, total) VALUES (?, ?, ?)";
+$query = "INSERT INTO transaksi (email, alamat, total, metode) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ssi", $email, $alamat, $total);
+$stmt->bind_param("ssis", $email, $alamat, $total, $metode);
 
 if ($stmt->execute()) {
     $id_transaksi = $stmt->insert_id;
