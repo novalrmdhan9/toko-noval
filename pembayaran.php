@@ -2,16 +2,17 @@
 include 'db.php';
 header('Content-Type: application/json');
 
+// Ambil dan decode input
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Cek input
+// Validasi data
 if (
     !$data ||
     !isset($data['email']) ||
     !isset($data['alamat']) ||
     !isset($data['total']) ||
     !isset($data['items']) ||
-    !isset($data['metode']) // ⬅️ tambahkan pengecekan metode
+    !isset($data['metode'])
 ) {
     echo json_encode(["success" => false, "message" => "Data tidak lengkap"]);
     exit;
@@ -20,7 +21,7 @@ if (
 $email = $data['email'];
 $alamat = $data['alamat'];
 $total = $data['total'];
-$metode = $data['metode']; // ⬅️ ambil metode pembayaran
+$metode = $data['metode'];
 $items = $data['items'];
 
 // Simpan ke tabel transaksi
@@ -43,7 +44,9 @@ if ($stmt->execute()) {
     }
 
     echo json_encode(["success" => true, "message" => "Transaksi berhasil"]);
+    exit; // ⬅️ ini penting
 } else {
     echo json_encode(["success" => false, "message" => "Gagal menyimpan transaksi"]);
+    exit;
 }
 ?>
