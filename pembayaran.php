@@ -1,11 +1,17 @@
 <?php
+error_reporting(0);
+ini_set('display_errors', 0);
+
 include 'db.php';
 header('Content-Type: application/json');
 
-// Ambil dan decode input
+if (!$conn) {
+    echo json_encode(["success" => false, "message" => "Koneksi database gagal"]);
+    exit;
+}
+
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Validasi data
 if (
     !$data ||
     !isset($data['email']) ||
@@ -24,7 +30,6 @@ $total = $data['total'];
 $metode = $data['metode'];
 $items = $data['items'];
 
-// Simpan ke tabel transaksi
 $query = "INSERT INTO transaksi (email, alamat, total, metode) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ssis", $email, $alamat, $total, $metode);
@@ -44,9 +49,8 @@ if ($stmt->execute()) {
     }
 
     echo json_encode(["success" => true, "message" => "Transaksi berhasil"]);
-    exit; // ⬅️ ini penting
+    exit;
 } else {
     echo json_encode(["success" => false, "message" => "Gagal menyimpan transaksi"]);
     exit;
 }
-?>
