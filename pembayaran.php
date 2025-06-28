@@ -37,7 +37,7 @@ $stmt->bind_param("ssis", $email, $alamat, $total, $metode);
 if ($stmt->execute()) {
     $id_transaksi = $stmt->insert_id;
 
-    $itemQuery = "INSERT INTO transaksi_items (id_transaksi, nama_barang, harga, gambar) VALUES (?, ?, ?, ?)";
+    $itemQuery = "INSERT INTO transaksi_detail (id_transaksi, nama_barang, harga, gambar) VALUES (?, ?, ?, ?)";
     $itemStmt = $conn->prepare($itemQuery);
 
     foreach ($items as $item) {
