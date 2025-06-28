@@ -2,21 +2,30 @@
 include 'db.php';
 header('Content-Type: application/json');
 
+// Ambil data JSON
 $data = json_decode(file_get_contents("php://input"), true);
-if (!isset($data['id_transaksi']) || !isset($data['alamat'])) {
+
+// Validasi data
+if (
+    !isset($data['id_transaksi']) ||
+    !isset($data['alamat']) ||
+    !isset($data['metode'])
+) {
     echo json_encode(["success" => false, "message" => "Data tidak lengkap"]);
     exit;
 }
 
 $id = intval($data['id_transaksi']);
 $alamat = $data['alamat'];
+$metode = $data['metode'];
 
-$stmt = $conn->prepare("UPDATE transaksi SET alamat = ? WHERE id_transaksi = ?");
-$stmt->bind_param("si", $alamat, $id);
+// Update query
+$stmt = $conn->prepare("UPDATE transaksi SET alamat = ?, metode = ? WHERE id_transaksi = ?");
+$stmt->bind_param("ssi", $alamat, $metode, $id);
 
 if ($stmt->execute()) {
-    echo json_encode(["success" => true]);
+    echo json_encode(["success" => true, "message" => "Berhasil update transaksi"]);
 } else {
-    echo json_encode(["success" => false, "message" => "Gagal update alamat"]);
+    echo json_encode(["success" => false, "message" => "Gagal update transaksi"]);
 }
 ?>
