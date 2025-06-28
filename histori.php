@@ -22,7 +22,7 @@ while ($row = $result->fetch_assoc()) {
     $id_transaksi = $row['id_transaksi'];
 
     // Ambil item berdasarkan transaksi
-    $itemSql = "SELECT nama_barang, harga, gambar FROM transaksi_items WHERE id_transaksi = ?";
+    $itemSql = "SELECT nama_barang, harga, gambar FROM transaksi_detail WHERE id_transaksi = ?";
     $itemStmt = $conn->prepare($itemSql);
     $itemStmt->bind_param("i", $id_transaksi);
     $itemStmt->execute();
